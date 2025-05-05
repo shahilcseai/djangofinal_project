@@ -1,0 +1,27 @@
+{% extends 'camps/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Register for {{ camp.title }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h1 class="card-title">Register for {{ camp.title }}</h1>
+        
+        <div class="mb-4">
+            <h5>Camp Details</h5>
+            <p><strong>Date:</strong> {{ camp.date|date:"F j, Y, g:i a" }}</p>
+            <p><strong>Location:</strong> {{ camp.location }}</p>
+            <p><strong>Available Slots:</strong> {{ camp.available_slots }}/{{ camp.capacity }}</p>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <p>Are you sure you want to register for this blood donation camp?</p>
+            <button type="submit" class="btn btn-primary">Confirm Registration</button>
+            <a href="{% url 'camps:camp_detail' camp.pk %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %} 

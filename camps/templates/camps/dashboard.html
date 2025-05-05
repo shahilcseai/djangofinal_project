@@ -1,0 +1,106 @@
+{% extends 'camps/base.html' %}
+
+{% block title %}My Dashboard - Blood Donation Management System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <h1>My Dashboard</h1>
+        <p class="lead">Welcome, {{ user.get_full_name|default:user.username }}!</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="h5 mb-0">Upcoming Registrations</h2>
+            </div>
+            <div class="card-body">
+                {% if upcoming_registrations %}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Camp</th>
+                                    <th>Date</th>
+                                    <th>Location</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for registration in upcoming_registrations %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'camps:camp_detail' registration.camp.pk %}">
+                                            {{ registration.camp.title }}
+                                        </a>
+                                    </td>
+                                    <td>{{ registration.camp.date|date:"F j, Y, g:i a" }}</td>
+                                    <td>{{ registration.camp.location }}</td>
+                                    <td>
+                                        <span class="badge bg-{{ registration.camp.status_class }}">
+                                            {{ registration.camp.status|title }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">No upcoming registrations.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="h5 mb-0">Past Registrations</h2>
+            </div>
+            <div class="card-body">
+                {% if past_registrations %}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Camp</th>
+                                    <th>Date</th>
+                                    <th>Location</th>
+                                    <th>Attendance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for registration in past_registrations %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'camps:camp_detail' registration.camp.pk %}">
+                                            {{ registration.camp.title }}
+                                        </a>
+                                    </td>
+                                    <td>{{ registration.camp.date|date:"F j, Y, g:i a" }}</td>
+                                    <td>{{ registration.camp.location }}</td>
+                                    <td>
+                                        {% if registration.attended %}
+                                            <span class="badge bg-success">Attended</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Not Attended</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">No past registrations.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

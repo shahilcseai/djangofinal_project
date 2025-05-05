@@ -1,0 +1,105 @@
+{% extends 'camps/base.html' %}
+
+{% block title %}Blood Donation Camps{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h1>Blood Donation Camps</h1>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="get" class="row g-3">
+                    <div class="col-md-4">
+                        {{ form.search }}
+                    </div>
+                    <div class="col-md-3">
+                        {{ form.category }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ form.date_from }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ form.date_to }}
+                    </div>
+                    <div class="col-md-1">
+                        <button type="submit" class="btn btn-primary w-100">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if upcoming_camps %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h2>Upcoming Camps</h2>
+    </div>
+</div>
+<div class="row">
+    {% for camp in upcoming_camps %}
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <h5 class="card-title">{{ camp.title }}</h5>
+                    <span class="badge bg-{{ camp.status_class }}">{{ camp.status|title }}</span>
+                </div>
+                <h6 class="card-subtitle mb-2 text-muted">{{ camp.date|date:"F j, Y, g:i a" }}</h6>
+                <p class="card-text">
+                    <strong>Location:</strong> {{ camp.location }}<br>
+                    <strong>Category:</strong> {{ camp.get_category_display }}<br>
+                    <strong>Available Slots:</strong> {{ camp.available_slots }}/{{ camp.capacity }}
+                </p>
+                <a href="{% url 'camps:camp_detail' camp.pk %}" class="btn btn-primary">View Details</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if past_camps %}
+<div class="row mb-4 mt-4">
+    <div class="col-md-12">
+        <h2>Past Camps</h2>
+    </div>
+</div>
+<div class="row">
+    {% for camp in past_camps %}
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <h5 class="card-title">{{ camp.title }}</h5>
+                    <span class="badge bg-{{ camp.status_class }}">{{ camp.status|title }}</span>
+                </div>
+                <h6 class="card-subtitle mb-2 text-muted">{{ camp.date|date:"F j, Y, g:i a" }}</h6>
+                <p class="card-text">
+                    <strong>Location:</strong> {{ camp.location }}<br>
+                    <strong>Category:</strong> {{ camp.get_category_display }}<br>
+                    <strong>Total Participants:</strong> {{ camp.registrations.count }}/{{ camp.capacity }}
+                </p>
+                <a href="{% url 'camps:camp_detail' camp.pk %}" class="btn btn-secondary">View Details</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if not upcoming_camps and not past_camps %}
+<div class="row">
+    <div class="col-12">
+        <div class="alert alert-info">
+            No blood donation camps found matching your criteria.
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %} 

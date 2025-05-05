@@ -1,0 +1,42 @@
+{% extends 'camps/base.html' %}
+
+{% block title %}{{ camp.title }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h1 class="card-title">{{ camp.title }}</h1>
+        <h6 class="card-subtitle mb-3 text-muted">{{ camp.date|date:"F j, Y, g:i a" }}</h6>
+        
+        <div class="mb-4">
+            <h5>Details</h5>
+            <p><strong>Location:</strong> {{ camp.location }}</p>
+            <p><strong>Available Slots:</strong> {{ camp.available_slots }}/{{ camp.capacity }}</p>
+            <p><strong>Description:</strong></p>
+            <p>{{ camp.description }}</p>
+        </div>
+
+        {% if user.is_authenticated %}
+            {% if is_registered %}
+                <div class="alert alert-success">
+                    You are registered for this camp!
+                </div>
+            {% elif camp.is_past %}
+                <div class="alert alert-warning">
+                    This camp has already taken place.
+                </div>
+            {% elif camp.is_full %}
+                <div class="alert alert-warning">
+                    This camp is full.
+                </div>
+            {% else %}
+                <a href="{% url 'camps:register' camp.pk %}" class="btn btn-primary">Register for this Camp</a>
+            {% endif %}
+        {% else %}
+            <div class="alert alert-info">
+                Please <a href="{% url 'admin:login' %}">login</a> to register for this camp.
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 
